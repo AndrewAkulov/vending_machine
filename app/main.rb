@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'vending_machine_app'
 require_relative 'vending_machine'
 require_relative 'stock'

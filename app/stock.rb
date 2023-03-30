@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Stock
-
   attr_reader :products
 
   def initialize(stock)
@@ -23,6 +22,7 @@ class Stock
 
   def update_stock(product)
     return if out_of_stock?(product)
+
     @stock[product] -= 1
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'spec_helper'
 
 RSpec.describe CoinsManager do
@@ -30,7 +32,8 @@ RSpec.describe CoinsManager do
 
     it 'updates the coins inventory' do
       coins_manager.restock_coins(inserted_coins)
-      expect(coins_manager.instance_variable_get(:@coins)).to eq({ 5 => 11, 3 => 6, 2 => 5, 1 => 11, 0.5 => 6, 0.25 => 10 })
+      expect(coins_manager.instance_variable_get(:@coins)).to eq({ 5 => 11, 3 => 6, 2 => 5, 1 => 11, 0.5 => 6,
+                                                                   0.25 => 10 })
     end
   end
 

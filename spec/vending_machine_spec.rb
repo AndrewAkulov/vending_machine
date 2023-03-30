@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'spec_helper'
 
 RSpec.describe VendingMachine do
@@ -16,7 +18,9 @@ RSpec.describe VendingMachine do
       end
 
       it 'updates the stock' do
-        expect { vending_machine.buy_product(product, inserted_coins) }.to change { initial_stock.product_quantity(product) }.by(-1)
+        expect { vending_machine.buy_product(product, inserted_coins) }.to change {
+                                                                             initial_stock.product_quantity(product)
+                                                                           }.by(-1)
       end
 
       it 'updates the coins inventory' do
@@ -30,7 +34,9 @@ RSpec.describe VendingMachine do
         let(:invalid_product) { Product.new(id: 2, name: 'Not in stock', price: 2) }
 
         it 'raises an InvalidProductIdError' do
-          expect { vending_machine.buy_product(invalid_product, inserted_coins) }.to raise_error(VendingMachine::InvalidProductIdError)
+          expect do
+            vending_machine.buy_product(invalid_product, inserted_coins)
+          end.to raise_error(VendingMachine::InvalidProductIdError)
         end
       end
 
@@ -38,7 +44,9 @@ RSpec.describe VendingMachine do
         let(:initial_stock) { Stock.new({ Product.new(id: 1, name: 'Soda', price: 3.5) => 0 }) }
 
         it 'raises a ProductOutOfStockError' do
-          expect { vending_machine.buy_product(product, inserted_coins) }.to raise_error(VendingMachine::ProductOutOfStockError)
+          expect do
+            vending_machine.buy_product(product, inserted_coins)
+          end.to raise_error(VendingMachine::ProductOutOfStockError)
         end
       end
 
@@ -46,7 +54,9 @@ RSpec.describe VendingMachine do
         let(:inserted_coins) { [1] }
 
         it 'raises a NotEnoughMoneyError' do
-          expect { vending_machine.buy_product(product, inserted_coins) }.to raise_error(VendingMachine::NotEnoughMoneyError)
+          expect do
+            vending_machine.buy_product(product, inserted_coins)
+          end.to raise_error(VendingMachine::NotEnoughMoneyError)
         end
       end
 
@@ -55,7 +65,9 @@ RSpec.describe VendingMachine do
         let(:inserted_coins) { [5, 5, 5] }
 
         it 'raises a NotEnoughChangeError' do
-          expect { vending_machine.buy_product(product, inserted_coins) }.to raise_error(VendingMachine::NotEnoughChangeError)
+          expect do
+            vending_machine.buy_product(product, inserted_coins)
+          end.to raise_error(VendingMachine::NotEnoughChangeError)
         end
       end
     end

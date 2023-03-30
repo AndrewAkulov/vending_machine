@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'spec_helper'
 
 RSpec.describe VendingMachineApp do
@@ -35,7 +37,7 @@ RSpec.describe VendingMachineApp do
     end
 
     it 'displays the result of the purchase' do
-      expect(vending_machine_app).to receive(:puts).with("You bought the product.")
+      expect(vending_machine_app).to receive(:puts).with('You bought the product.')
       allow(vending_machine_app).to receive(:gets).and_return('1', '5')
       vending_machine_app.run
     end

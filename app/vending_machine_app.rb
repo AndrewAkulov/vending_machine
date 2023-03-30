@@ -21,8 +21,8 @@ class VendingMachineApp
   private
 
   def display_products
-    puts "Welcome to the Vending Machine!"
-    puts "Available products:"
+    puts 'Welcome to the Vending Machine!'
+    puts 'Available products:'
     @vending_machine.stock.products_quantities.each do |product, quantity|
       puts "ID: #{product.id}, Name: #{product.name}, Price: #{product.price}, Quantity: #{quantity}"
     end
@@ -38,26 +38,26 @@ class VendingMachineApp
   end
 
   def get_inserted_coins
-    puts "Please insert coins separated by commas (0.25, 0.5, 1, 2, 3, 5):"
+    puts 'Please insert coins separated by commas (0.25, 0.5, 1, 2, 3, 5):'
     gets.chomp.split(',').map(&:to_f)
   end
 
   def process_purchase(product, inserted_coins)
     @vending_machine.buy_product(product, inserted_coins)
   rescue VendingMachine::InvalidProductIdError, VendingMachine::ProductOutOfStockError,
-    VendingMachine::NotEnoughMoneyError, VendingMachine::NotEnoughChangeError,
-    VendingMachine::InvalidCoinError => e
+         VendingMachine::NotEnoughMoneyError, VendingMachine::NotEnoughChangeError,
+         VendingMachine::InvalidCoinError => e
     e.message
   end
 
   def display_result(result)
     if result.is_a?(Hash)
-      puts "You bought the product."
-      puts "Your change is:"
+      puts 'You bought the product.'
+      puts 'Your change is:'
       result.each do |coin, count|
         puts "#{coin} * #{count}"
       end
-      puts "Thank you for your purchase!"
+      puts 'Thank you for your purchase!'
     else
       puts "#{result} \n\n\n"
     end

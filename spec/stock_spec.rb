@@ -1,5 +1,6 @@
-require_relative 'spec_helper'
+# frozen_string_literal: true
 
+require_relative 'spec_helper'
 
 RSpec.describe Stock do
   let(:product) { Product.new(id: 1, name: 'Soda', price: 3.5) }

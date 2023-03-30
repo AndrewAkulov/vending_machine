@@ -15,11 +15,9 @@ class CoinsManager
 
   def restock_coins(inserted_coins)
     inserted_coins.each do |coin|
-      if @coins[coin].nil?
-        raise VendingMachine::InvalidCoinError, "Invalid coin: #{coin}"
-      else
-        @coins[coin] += 1
-      end
+      raise VendingMachine::InvalidCoinError, "Invalid coin: #{coin}" if @coins[coin].nil?
+
+      @coins[coin] += 1
     end
   end
 
@@ -36,11 +34,9 @@ class CoinsManager
       end
     end
 
-    if remaining_change_needed.zero? && has_enough_change?(change)
-      change
-    else
-      nil
-    end
+    return if remaining_change_needed.nonzero? || !has_enough_change?(change)
+
+    change
   end
 
   def not_enough_change?(inserted_coins:, price:)
