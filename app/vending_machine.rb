@@ -43,7 +43,7 @@ class VendingMachine
   def buy_product(product, inserted_coins)
     validate_purchase(product:, inserted_coins:)
 
-    stock.update_stock(product)
+    stock.withdraw_product(product)
     coin_manager.restock_coins(inserted_coins)
     coin_manager.calculate_change(price: product.price, inserted_coins:)
   end

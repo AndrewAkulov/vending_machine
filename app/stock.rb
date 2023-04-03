@@ -24,7 +24,7 @@ class Stock
     @stock[product] < 1
   end
 
-  def update_stock(product)
+  def withdraw_product(product)
     return if out_of_stock?(product)
 
     @stock[product] -= 1

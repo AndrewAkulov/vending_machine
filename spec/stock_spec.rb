@@ -49,13 +49,13 @@ RSpec.describe Stock do
       let(:initial_stock) { Stock.new({ product => 0 }) }
 
       it 'does not update the stock' do
-        expect { stock.update_stock(product) }.not_to change { stock.product_quantity(product) }
+        expect { stock.withdraw_product(product) }.not_to change { stock.product_quantity(product) }
       end
     end
 
     context 'when the product is in stock' do
       it 'updates the stock' do
-        expect { stock.update_stock(product) }.to change { stock.product_quantity(product) }.by(-1)
+        expect { stock.withdraw_product(product) }.to change { stock.product_quantity(product) }.by(-1)
       end
     end
   end
