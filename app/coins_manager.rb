@@ -34,7 +34,7 @@ class CoinsManager
       end
     end
 
-    return if remaining_change_needed.nonzero? || !has_enough_change?(change)
+    return if remaining_change_needed.nonzero? || !enough_change?(change)
 
     change
   end
@@ -50,7 +50,7 @@ class CoinsManager
     [(@coins[coin] || 0), (change_needed / coin).floor].min
   end
 
-  def has_enough_change?(change)
+  def enough_change?(change)
     change.all? { |coin, count| @coins[coin] >= count }
   end
 end
