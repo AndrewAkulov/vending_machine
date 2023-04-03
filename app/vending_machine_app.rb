@@ -12,9 +12,9 @@ class VendingMachineApp
       break if product.nil?
 
       inserted_coins = get_inserted_coins
-      result = process_purchase(product, inserted_coins)
+      change = process_purchase(product, inserted_coins)
 
-      display_result(result)
+      display_successful_result(change)
     end
   end
 
@@ -37,20 +37,18 @@ class VendingMachineApp
     raise VendingMachine::InvalidProductIdError if @vending_machine.invalid_product_id?(id)
 
     @vending_machine.stock.products.find { |product| product.id == id }
-  rescue VendingMachine::InvalidProductIdError, VendingMachine::NotEnoughMoneyError => e
+  rescue VendingMachine::InvalidProductIdError => e
     puts e.message.to_s
     get_product
   end
 
   def process_purchase(product, inserted_coins)
+    result = nil
+
     loop do
       result = @vending_machine.buy_product(product, inserted_coins)
-      return result if result.is_a?(Hash)
 
-      display_result(result)
-      inserted_coins += get_inserted_coins
-      @vending_machine.buy_product(product, inserted_coins)
-
+      break if successful_purchase?(result)
     rescue VendingMachine::NotEnoughMoneyError => e
       puts e.message.to_s
       inserted_coins += get_inserted_coins
@@ -58,10 +56,17 @@ class VendingMachineApp
            VendingMachine::ProductOutOfStockError,
            VendingMachine::NotEnoughChangeError => e
       puts e.message
+      break
     end
+
+    result
   end
 
-  def display_result(result)
+  def successful_purchase?(result)
+    result.is_a?(Hash)
+  end
+
+  def display_successful_result(result)
     puts 'You bought the product.'
     print_change(result)
     puts 'Thank you for your purchase!'
