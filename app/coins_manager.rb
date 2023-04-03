@@ -38,7 +38,7 @@ class CoinsManager
   end
 
   def not_enough_change?(inserted_coins:, price:)
-    calculate_change(inserted_coins: inserted_coins, price:price).nil?
+    calculate_change(inserted_coins:, price:).nil?
   end
 
   private

@@ -30,6 +30,9 @@ class VendingMachine
   end
 
   class InvalidCoinError < StandardError
+    def initialize(msg = 'Invalid coin. Please insert valid coins.')
+      super
+    end
   end
 
   def initialize(stock:, coins:)
