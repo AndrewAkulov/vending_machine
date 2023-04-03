@@ -23,30 +23,27 @@ class CoinsManager
 
   def calculate_change(inserted_coins:, price:)
     remaining_change_needed = inserted_coins.sum - price
-    coins_sorted_descending = @coins.keys.sort.reverse
+    sorted_descending_coins = @coins.keys.sort.reverse
     change = {}
 
-    coins_sorted_descending.each do |coin|
-      count = get_max_coin_count(coin, remaining_change_needed)
-      if count&.positive?
-        change[coin] = count
-        remaining_change_needed -= coin * count
-      end
+    sorted_descending_coins.each do |coin|
+      coin_count = max_coin_count(coin, remaining_change_needed)
+      next unless coin_count&.positive?
+
+      change[coin] = coin_count
+      remaining_change_needed -= coin * coin_count
     end
 
-    return if remaining_change_needed.nonzero? || !enough_change?(change)
-
-    change
+    change if remaining_change_needed.zero? && enough_change?(change)
   end
 
   def not_enough_change?(inserted_coins:, price:)
-    change = calculate_change(inserted_coins:, price:)
-    change.nil?
+    calculate_change(inserted_coins: inserted_coins, price:price).nil?
   end
 
   private
 
-  def get_max_coin_count(coin, change_needed)
+  def max_coin_count(coin, change_needed)
     [(@coins[coin] || 0), (change_needed / coin).floor].min
   end
 
