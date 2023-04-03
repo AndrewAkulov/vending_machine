@@ -39,58 +39,58 @@ class VendingMachineApp
 
       @vending_machine.stock.products.find { |product| product.id == id }
     end
+  end
 
-    def process_purchase(product, inserted_coins)
-      loop do
-        result = @vending_machine.buy_product(product, inserted_coins)
-        return result if result.is_a?(Hash)
+  def process_purchase(product, inserted_coins)
+    loop do
+      result = @vending_machine.buy_product(product, inserted_coins)
+      return result if result.is_a?(Hash)
 
-        display_result(result)
-        inserted_coins += get_inserted_coins
-      rescue VendingMachine::NotEnoughMoneyError => e
-        puts "#{e.message}. Please insert more coins."
-        inserted_coins += get_inserted_coins
+      display_result(result)
+      inserted_coins += get_inserted_coins
+    rescue VendingMachine::NotEnoughMoneyError => e
+      puts "#{e.message}. Please insert more coins."
+      inserted_coins += get_inserted_coins
+    rescue VendingMachine::InvalidCoinError => e
+      puts "#{e.message}. Please insert valid coins."
+      inserted_coins += get_inserted_coins
+    end
+    @vending_machine.buy_product(product, inserted_coins)
+  rescue VendingMachine::InvalidProductIdError,
+    VendingMachine::ProductOutOfStockError,
+    VendingMachine::NotEnoughChangeError => e
+    puts e.message
+  end
+
+  def display_result(result)
+    if result.is_a?(Hash)
+      puts 'You bought the product.'
+      puts 'Your change is:'
+      result.each do |coin, count|
+        puts "#{coin} * #{count}"
+      end
+      puts 'Thank you for your purchase!'
+    else
+      puts "#{result} \n\n\n"
+    end
+  end
+
+  def get_inserted_coins
+    loop do
+      puts 'Please insert coins separated by commas (0.25, 0.5, 1, 2, 3, 5):'
+      inserted_coins = gets.chomp.split(',').map(&:to_f)
+      begin
+        validate_inserted_coins(inserted_coins)
+        return inserted_coins
       rescue VendingMachine::InvalidCoinError => e
-        puts "#{e.message}. Please insert valid coins."
-        inserted_coins += get_inserted_coins
-      end
-      @vending_machine.buy_product(product, inserted_coins)
-    rescue VendingMachine::InvalidProductIdError,
-           VendingMachine::ProductOutOfStockError,
-           VendingMachine::NotEnoughChangeError => e
-      puts e.message
-    end
-
-    def display_result(result)
-      if result.is_a?(Hash)
-        puts 'You bought the product.'
-        puts 'Your change is:'
-        result.each do |coin, count|
-          puts "#{coin} * #{count}"
-        end
-        puts 'Thank you for your purchase!'
-      else
-        puts "#{result} \n\n\n"
+        puts "#{e.message} Please insert valid coins."
       end
     end
+  end
 
-    def get_inserted_coins
-      loop do
-        puts 'Please insert coins separated by commas (0.25, 0.5, 1, 2, 3, 5):'
-        inserted_coins = gets.chomp.split(',').map(&:to_f)
-        begin
-          validate_inserted_coins(inserted_coins)
-          return inserted_coins
-        rescue VendingMachine::InvalidCoinError => e
-          puts "#{e.message} Please insert valid coins."
-        end
-      end
-    end
+  def validate_inserted_coins(inserted_coins)
+    return if inserted_coins.all? { |coin| @vending_machine.coin_manager.valid_coin?(coin) }
 
-    def validate_inserted_coins(inserted_coins)
-      return if inserted_coins.all? { |coin| @vending_machine.coin_manager.valid_coin?(coin) }
-
-      raise VendingMachine::InvalidCoinError, 'Invalid coin. Please insert valid coins.'
-    end
+    raise VendingMachine::InvalidCoinError, 'Invalid coin. Please insert valid coins.'
   end
 end
