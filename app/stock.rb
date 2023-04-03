@@ -12,6 +12,10 @@ class Stock
     @stock[product]
   end
 
+  def product_by_id(id)
+    @stock.keys.find { |product| product.id == id }
+  end
+
   def products_quantities
     @stock
   end

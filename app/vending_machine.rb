@@ -6,7 +6,7 @@ class VendingMachine
   attr_accessor :coin_manager, :stock
 
   class ProductOutOfStockError < StandardError
-    def initialize(msg = 'Invalid quantity. Please enter a positive number.')
+    def initialize(msg = 'Sorry, this product is out of stock')
       super
     end
   end
@@ -38,11 +38,19 @@ class VendingMachine
   end
 
   def buy_product(product, inserted_coins)
-    validate_purchase(product: product, inserted_coins: inserted_coins)
+    validate_purchase(product:, inserted_coins:)
 
     stock.update_stock(product)
     coin_manager.restock_coins(inserted_coins)
-    coin_manager.calculate_change(price: product.price, inserted_coins: inserted_coins)
+    coin_manager.calculate_change(price: product.price, inserted_coins:)
+  end
+
+  def invalid_product_id?(product_id)
+    stock.product_by_id(product_id).nil?
+  end
+
+  def find_product_by_id(product_id)
+    stock.products.find { |product| product.id == product_id }
   end
 
   private
@@ -50,8 +58,8 @@ class VendingMachine
   def validate_purchase(product:, inserted_coins:)
     raise InvalidProductIdError if stock.invalid_product?(product)
     raise ProductOutOfStockError if stock.out_of_stock?(product)
-    raise NotEnoughMoneyError if not_enough_money?(product: product, money: inserted_coins&.sum)
-    raise NotEnoughChangeError if coin_manager.not_enough_change?(price: product.price, inserted_coins: inserted_coins)
+    raise NotEnoughMoneyError if not_enough_money?(product:, money: inserted_coins&.sum)
+    raise NotEnoughChangeError if coin_manager.not_enough_change?(price: product.price, inserted_coins:)
   end
 
   def not_enough_money?(product:, money:)

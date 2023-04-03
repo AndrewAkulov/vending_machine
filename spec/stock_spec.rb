@@ -19,6 +19,20 @@ RSpec.describe Stock do
     end
   end
 
+  describe '#product_by_id' do
+    context 'when product with id exists in the stock' do
+      it 'returns the product' do
+        expect(stock.product_by_id(1)).to eq(product)
+      end
+    end
+
+    context 'when product with id does not exist in the stock' do
+      it 'returns nil' do
+        expect(stock.product_by_id(3)).to be_nil
+      end
+    end
+  end
+
   describe '#out_of_stock?' do
     it 'returns false if there is stock for a product' do
       expect(stock.out_of_stock?(product)).to be_falsey

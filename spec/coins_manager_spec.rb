@@ -43,12 +43,12 @@ RSpec.describe CoinsManager do
       let(:price) { 6.5 }
 
       it 'calculates the correct change' do
-        change = coins_manager.calculate_change(inserted_coins: inserted_coins, price: price)
+        change = coins_manager.calculate_change(inserted_coins:, price:)
         expect(change).to eq({ 1 => 1, 0.5 => 1 })
       end
 
       it 'returns change using the minimum number of coins' do
-        change = coins_manager.calculate_change(inserted_coins: inserted_coins, price: price)
+        change = coins_manager.calculate_change(inserted_coins:, price:)
         total_coins = change.values.sum
         expect(total_coins).to eq 2
       end
@@ -60,7 +60,7 @@ RSpec.describe CoinsManager do
       let(:price) { 11 }
 
       it 'returns nil' do
-        change = coins_manager.calculate_change(inserted_coins: inserted_coins, price: price)
+        change = coins_manager.calculate_change(inserted_coins:, price:)
         expect(change).to be_nil
       end
     end
@@ -72,7 +72,7 @@ RSpec.describe CoinsManager do
       let(:price) { 6.5 }
 
       it 'returns false' do
-        result = coins_manager.not_enough_change?(inserted_coins: inserted_coins, price: price)
+        result = coins_manager.not_enough_change?(inserted_coins:, price:)
         expect(result).to be_falsey
       end
     end
@@ -83,7 +83,7 @@ RSpec.describe CoinsManager do
       let(:price) { 11 }
 
       it 'returns true' do
-        result = coins_manager.not_enough_change?(inserted_coins: inserted_coins, price: price)
+        result = coins_manager.not_enough_change?(inserted_coins:, price:)
         expect(result).to be_truthy
       end
     end

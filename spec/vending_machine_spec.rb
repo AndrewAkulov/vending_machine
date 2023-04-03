@@ -72,4 +72,40 @@ RSpec.describe VendingMachine do
       end
     end
   end
+
+  describe '#invalid_product_id?' do
+    context 'when product_id is valid' do
+      let(:product_id) { 1 }
+
+      it 'returns false' do
+        expect(vending_machine.invalid_product_id?(product_id)).to eq(false)
+      end
+    end
+
+    context 'when product_id is invalid' do
+      let(:product_id) { 2 }
+
+      it 'returns true' do
+        expect(vending_machine.invalid_product_id?(product_id)).to eq(true)
+      end
+    end
+  end
+
+  describe '#find_product_by_id' do
+    context 'when product_id is valid' do
+      let(:product_id) { 1 }
+
+      it 'returns the product with the specified id' do
+        expect(vending_machine.find_product_by_id(product_id)).to eq(initial_stock.products.first)
+      end
+    end
+
+    context 'when product_id is invalid' do
+      let(:product_id) { 2 }
+
+      it 'returns nil' do
+        expect(vending_machine.find_product_by_id(product_id)).to eq(nil)
+      end
+    end
+  end
 end
